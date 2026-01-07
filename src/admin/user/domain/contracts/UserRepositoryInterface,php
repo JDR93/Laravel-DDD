@@ -1,0 +1,11 @@
+<?php 
+
+namespace Src\Admin\User\Domain\Contracts;
+
+use Src\Admin\User\Domain\Entities\User;
+
+interface UserRepositoryInterface
+{
+    public function findById(int $id): ? User;
+    public function save(User $user): void;
+}
