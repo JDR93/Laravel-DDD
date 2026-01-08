@@ -21,5 +21,18 @@ class User
         $this->email = $email;
     }
 
+    public function id(): int
+    {
+        return $this->id;
+    }
+
+    public function username(): UserName
+    {
+        return $this->username;
+    }
     
+    public function email(): UserEmail
+    {
+        return $this->email;
+    }
 }

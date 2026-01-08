@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\User\Application;
+namespace src\admin\user\application;
 
 use Src\Admin\User\Domain\Contracts\UserRepositoryInterface;
 use Src\Admin\User\Domain\Entities\User;
