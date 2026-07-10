@@ -2,22 +2,31 @@
 
 namespace Src\admin\user\infrastructure\controllers;
 
+use Src\admin\user\domain\exceptions\UserNotFoundException;
 use App\Http\Controllers\Controller;
-use Src\Admin\User\Application\GetUserByIdUseCase;
-use Src\Admin\User\infrastructure\Repositories\EloquentUserRepository;
+use Src\admin\user\application\services\GetUserByIdService;
 
 final class GetUserByIdGETController extends Controller
 {
 
-    public function index($id)
-    {
-        $getUserByIdUseCase = new GetUserByIdUseCase(new EloquentUserRepository());
-        $getUserByIdUseCase->execute($id);
+    private $getUserByIdService;
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User retrieved successfully',
-            'data' => $getUserByIdUseCase->execute($id)
-        ], 200);
+    public function __construct(GetUserByIdService $getUserByIdService)
+    {
+        $this->getUserByIdService = $getUserByIdService;
+    }
+
+    public function show(int $id)
+    {
+        try {
+            $user = $this->getUserByIdService->execute($id);
+            return response()->json([
+                'id' => $user->id()->value(),
+                'username' => $user->username()->value(),
+                'email' => $user->email()->value(),
+            ]);
+        } catch (UserNotFoundException $e) {
+            return response()->json([], 404);
+        }
     }
 }

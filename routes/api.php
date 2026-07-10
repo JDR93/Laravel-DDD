@@ -8,3 +8,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('admin/user')->group(base_path('src/admin/user/infrastructure/routes/api.php'));
+
+Route::get('/hello', function () {
+    return "Hello from User Admin Module";
+});

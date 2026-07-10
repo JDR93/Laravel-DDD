@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-namespace Src\Admin\User\Domain\ValueObjects;
+namespace Src\admin\user\domain\value_objects;
 
 class UserName
 {
@@ -8,16 +8,14 @@ class UserName
 
     public function __construct(string $value)
     {
-        if(strlen($value) < 3){
+        if (strlen($value) < 3) {
             throw new \InvalidArgumentException("Username must be at least 3 characters long.");
         }
         $this->value = $value;
     }
 
-    public function getValue(): string
+    public function value(): string
     {
         return $this->value;
     }
-
 }
-

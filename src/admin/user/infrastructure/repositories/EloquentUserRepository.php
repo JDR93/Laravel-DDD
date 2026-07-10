@@ -1,37 +1,50 @@
 <?php
 
-namespace Src\Admin\User\infrastructure\Repositories;
+namespace Src\admin\user\infrastructure\repositories;
 
-use Src\Admin\User\Domain\Contracts\UserRepositoryInterface;
 use App\Models\User as EloquentUser;
-use Src\Admin\User\Domain\Entities\User;
-use Src\Admin\User\Domain\ValueObjects\UserEmail;
-use Src\Admin\User\Domain\ValueObjects\UserName;
+use Src\admin\user\domain\entities\User;
+use Src\admin\user\domain\repositories\UserRepositoryInterface;
+use Src\admin\user\infrastructure\repositories\mappers\EloquentUserMapper;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
+
+    public function __construct(
+        private EloquentUserMapper $mapper
+    ) {}
+
+    public function getAll(): array
+    {
+        return array_map(
+            fn($user) => $this->mapper->toDomain($user),
+            EloquentUser::all()->all()
+        );
+    }
+
     public function findById(int $id): ?User
     {
         $eloquentUser = EloquentUser::find($id);
-        if (!$eloquentUser) {
-            return null;
-        }
 
-        return new User(
-            $eloquentUser->id,
-            new UserName($eloquentUser->name),
-            new UserEmail($eloquentUser->email)
-        );
+        return $eloquentUser
+            ? $this->mapper->toDomain($eloquentUser)
+            : null;
     }
 
     public function save(User $user): void
     {
-        EloquentUser::updateOrCreate(
-            ['id' => $user->id()],
+        $eloquentUser = EloquentUser::updateOrCreate(
+            ['id' => $user->id()->value()],
             [
-                'name' => $user->username()->getValue(),
-                'email' => $user->email()->getValue(),
+                'name' => $user->username()->value(),
+                'email' => $user->email()->value(),
+                'password' => bcrypt('defaultpassword'),
             ]
         );
+    }
+
+    public function existsByEmail(string $email): bool
+    {
+        return EloquentUser::where('email', $email)->exists();
     }
 }

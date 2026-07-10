@@ -1,6 +1,6 @@
 <?php 
 
-namespace Src\Admin\User\Domain\ValueObjects;
+namespace Src\admin\user\domain\value_objects;
 
 class UserEmail
 {
@@ -14,7 +14,7 @@ class UserEmail
         $this->value = $value;
     }
 
-    public function getValue(): string
+    public function value(): string
     {
         return $this->value;
     }   

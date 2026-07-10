@@ -1,18 +1,19 @@
 <?php
 
-namespace Src\Admin\User\Domain\Entities;
+namespace Src\admin\user\domain\entities;
 
-use Src\Admin\User\Domain\ValueObjects\UserEmail;
-use Src\Admin\User\Domain\ValueObjects\Username;
+use Src\admin\user\domain\value_objects\UserEmail;
+use Src\admin\user\domain\value_objects\UserId;
+use Src\admin\user\domain\value_objects\Username;
 
 class User
 {
-    private int $id;
+    private UserId $id;
     private UserName $username;
     private UserEmail $email;
 
     public function __construct(
-        int $id,
+        UserId $id,
         Username $username,
         UserEmail $email,
     ) {
@@ -21,7 +22,7 @@ class User
         $this->email = $email;
     }
 
-    public function id(): int
+    public function id(): UserId
     {
         return $this->id;
     }
@@ -30,7 +31,7 @@ class User
     {
         return $this->username;
     }
-    
+
     public function email(): UserEmail
     {
         return $this->email;
